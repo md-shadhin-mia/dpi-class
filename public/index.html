@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Classman</title>
+</head>
+<body>
+    <!-- <button onclick="showPage('signin');">sign in</button>
+    <button onclick="showPage('register');">sign up</button> -->
+    <a href="#signin">Sing in</a>
+    <a href="#register">Login in</a>
+    <div class="page-contents">
+        <div class="home">
+            <h2>Welcome to DPI Class</h2>
+        </div>
+        <div class="signin">
+            <form id="signin-form">
+                <h2>Sign In</h2>
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+                <button type="submit">Sign in</button>
+            </form>
+        </div>
+        <div class="register">
+            <form id="register-form">
+                <h2>Create New User</h2>
+                <label for="name">Name: </label>
+                <input type="text" id="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+                <label for="password">Password: </label>
+                <input type="password" id="password" required>
+                <label for="re-password">Confarm Password: </label>
+                <input type="password" id="re-password" required>
+                <button type="submit">register</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
