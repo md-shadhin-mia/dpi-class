@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const path = require("path");
 const { auth } = require("./auth");
 const { classRouter } = require("./classroom");
-let PORT = 3000 || process.env.PORT;
-let MONGODB = "mongodb://localhost:27017/classman" || process.env.MONGODB;
+let PORT = process.env.PORT || 3000;
+let MONGODB = process.env.MONGODB || "mongodb://localhost:27017/classman";
 
 const app = express();
 
