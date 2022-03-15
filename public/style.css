@@ -1,7 +1,29 @@
-.register{
+*{
+    margin: 0px;
+    padding: 0px;
+}
+.header .user-menus{
+    display: none;
+}
+.header .login-menus{
+    display: block;
+}
+.header.authed .user-menus{
+    display: block;
+}
+.header.authed .login-menus{
+    display: none;
+}
+.header.authed 
+.page-contents > div{
     display: none;
 }
 
-.signin{
-    display: none;
+.classes .class-item{
+    border: 1px solid black;
+    margin: 2px;
+}
+
+.classes .class-item a{
+    text-decoration: none;
 }

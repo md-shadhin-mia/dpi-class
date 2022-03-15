@@ -4,17 +4,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
     <title>Classman</title>
 </head>
 <body>
     <!-- <button onclick="showPage('signin');">sign in</button>
     <button onclick="showPage('register');">sign up</button> -->
-    <a href="#signin">Sing in</a>
-    <a href="#register">Login in</a>
+    <div class="header" id="authcheck">
+        <div class="login-menus">
+            <a href="#signin">Sing in</a>
+            <a href="#register">Login in</a>
+        </div>
+        <div class="user-menus">
+            <a href="/">shadhin</a>
+            <a href="#create-class">new class</a>
+        </div>
+    </div>
+
     <div class="page-contents">
         <div class="home">
-            <h2>Welcome to DPI Class</h2>
+            <!-- <h2>Welcome to DPI Class</h2> -->
+            <!-- <div class="classes">
+                <div class="class-item">
+                    <a href="#classroom#time">
+                        <h3>bangla</h3>
+                        <p>Shadhin</p>
+                    </a>
+                </div>
+            </div> -->
         </div>
         <div class="signin">
             <form id="signin-form">
@@ -40,8 +57,28 @@
                 <button type="submit">register</button>
             </form>
         </div>
+        <div class="create-class">
+            <form id="create-class-form">
+                <h2>Create New class</h2>
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title" required>
+                <label for="description">Description</label>
+                <textarea name="description" id="description" cols="30" rows="10"></textarea>
+                <button type="submit">POST</button>
+            </form>
+        </div>
+        <div class="classroom">
+            <div class="head">
+            </div>
+
+            <form style="margin: 5px;">
+                <div>adding a new info</div>
+                <textarea name="content" id="content" cols="30" rows="6"></textarea>
+                <button type="submit">Post</button>
+            </form>
+        </div>
     </div>
 
-    <script src="main.js"></script>
+    <script src="/main.js"></script>
 </body>
 </html>
