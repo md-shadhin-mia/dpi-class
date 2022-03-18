@@ -41,12 +41,12 @@
     </div>
 
     <div class="page-contents">
-        <div class="home">
+        <div class="home" style="display: none;">
             <h3>Welcome to DPI Class</h3>
             <div class="classes">
             </div>
         </div>
-        <div class="signin">
+        <div class="signin" style="display: none;">
             <form id="signin-form" autocomplete="off">
                 <div class="caption">
                     <h2 class="text-primary">Let's Sign You In.</h2>
@@ -64,7 +64,7 @@
             </form>
             <div class="alternate">Don`t have an account? <a href="#register">Register</a></div>
         </div>
-        <div class="register">
+        <div class="register" style="display: none;">
             <form id="register-form" autocomplete="off">
                 <div class="caption">
                     <h2 class="text-primary">Let's Register You In.</h2>
@@ -90,7 +90,7 @@
             </form>
             <div class="alternate">Alredy have an account? <a href="#signin">Signin</a></div>
         </div>
-        <div class="create-class">
+        <div class="create-class" style="display: none;">
             <form id="create-class-form">
                 <h2>Create New class</h2>
                 <label for="title">Title</label>
@@ -100,7 +100,7 @@
                 <button type="submit">POST</button>
             </form>
         </div>
-        <div class="classroom">
+        <div class="classroom" style="display: none;">
             <div class="head">
             </div>
             <form style="margin: 5px;">
@@ -109,7 +109,7 @@
                 <button type="submit">Post</button>
             </form>
         </div>
-        <div class="uploadfile">
+        <div class="uploadfile" style="display: none;">
             <form action="/upload" method="POST" enctype="multipart/form-data">
                 <input type="file" name="file" id="file">
                 <button type="submit" class="btn primary">Upload</button>
