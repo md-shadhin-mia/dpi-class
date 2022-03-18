@@ -6,7 +6,7 @@ const { User } = require("./models/user");
 const router = express.Router();
 
 router.get("/", authenticate, async (req, res)=>{
-    let user = await User.findOne({_id:req.user.id}).populate("Classroom");
+    let user = await User.findById(req.user.id);
     res.json(user);
 });
 

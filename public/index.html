@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="/js/cropper.css">
+   
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+    <link rel="stylesheet" href="/css/main.css">
     <title>Classman</title>
 </head>
 <body>
@@ -12,50 +15,80 @@
     <button onclick="showPage('register');">sign up</button> -->
     <div class="header" id="authcheck">
         <div class="login-menus">
-            <a href="#signin">Sing in</a>
-            <a href="#register">Login in</a>
+            <a href="#signin" class="btn primary m-2">Sing in</a>
+            <a href="#register" class="btn text-primary m-2">Sign up</a>
         </div>
         <div class="user-menus">
-            <a href="/">shadhin</a>
-            <a href="#create-class">new class</a>
+            <div class="avater" data-toggleId="option-menu" id="header-user-avater">
+                <div class="avater-img">
+                    <!-- <img src="/files/1647681106287_profile.png" alt="shadhin" style="width: 100%;"> -->
+                    <span style="font-size: 1.5em;padding: 4px;">S</span>
+                </div>
+                <div class="text-primary text-bold p-2">
+                    Shadhin
+                </div>
+            </div>
+            <!-- <a href="/">shadhin</a> -->
+            <div class="menu-toggle" data-toggleId="option-menu">
+                <div class="one"></div>
+                <div class="two"></div>
+                <div class="three"></div>
+            </div>
+            <div class="more-option" id="option-menu">
+                <h3>helloworld</h3>
+            </div>
         </div>
     </div>
 
     <div class="page-contents">
         <div class="home">
-            <!-- <h2>Welcome to DPI Class</h2> -->
-            <!-- <div class="classes">
-                <div class="class-item">
-                    <a href="#classroom#time">
-                        <h3>bangla</h3>
-                        <p>Shadhin</p>
-                    </a>
-                </div>
-            </div> -->
+            <h3>Welcome to DPI Class</h3>
+            <div class="classes">
+            </div>
         </div>
         <div class="signin">
-            <form id="signin-form">
-                <h2>Sign In</h2>
-                <label for="email">Email:</label>
-                <input type="email" id="email" required>
-                <label for="password">Password</label>
-                <input type="password" id="password" required>
-                <button type="submit">Sign in</button>
+            <form id="signin-form" autocomplete="off">
+                <div class="caption">
+                    <h2 class="text-primary">Let's Sign You In.</h2>
+                    <h3>Welcome Back.</h3>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required >
+                </div>
+                <button type="submit" class="btn primary w100">Sign in</button>
             </form>
+            <div class="alternate">Don`t have an account? <a href="#register">Register</a></div>
         </div>
         <div class="register">
-            <form id="register-form">
-                <h2>Create New User</h2>
-                <label for="name">Name: </label>
-                <input type="text" id="name" required>
-                <label for="email">Email:</label>
-                <input type="email" id="email" required>
-                <label for="password">Password: </label>
-                <input type="password" id="password" required>
-                <label for="re-password">Confarm Password: </label>
-                <input type="password" id="re-password" required>
-                <button type="submit">register</button>
+            <form id="register-form" autocomplete="off">
+                <div class="caption">
+                    <h2 class="text-primary">Let's Register You In.</h2>
+                    <h3>Welcome to DPI-Class.</h3>
+                </div>
+                <div class="input-group">
+                    <label for="name">Name: </label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password: </label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="input-group">
+                    <label for="re-password">Confarm Password: </label>
+                    <input type="password" id="re-password" required>
+                </div>
+                <button type="submit" class="btn primary w100">register</button>
             </form>
+            <div class="alternate">Alredy have an account? <a href="#signin">Signin</a></div>
         </div>
         <div class="create-class">
             <form id="create-class-form">
@@ -70,15 +103,58 @@
         <div class="classroom">
             <div class="head">
             </div>
-
             <form style="margin: 5px;">
                 <div>adding a new info</div>
                 <textarea name="content" id="content" cols="30" rows="6"></textarea>
                 <button type="submit">Post</button>
             </form>
         </div>
+        <div class="uploadfile">
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" id="file">
+                <button type="submit" class="btn primary">Upload</button>
+            </form>
+        </div>
     </div>
 
+    <div class="overflow" id="overflow-dialog">
+        <div class="dialog">
+            <div class="title">
+                <h3>Upload a Profile</h3>
+            </div>
+            <div id="editorAndViewer">
+                <div class="circle" id="showImage"></div>
+            </div>
+            <div class="editer" id="btn-inputfile" >
+                <label class="btn primary" for="openfile">Browse</label>
+                <input type="file" id="openfile" style="height: 0;width: 0;">
+            </div>
+            <div class="editer hide" id="btn-crop">
+                <button class="btn primary" id="btn-action">Continue</button>
+            </div>
+        </div>
+    </div>
+    <script src="/js/axios.js"></script>
+    <script src="/js/cropper.js"></script>
     <script src="/main.js"></script>
+    <!-- <script>
+        const image = document.getElementById('myimg');
+        const cropImage = document.getElementById('cropImage');
+    const cropper = new Cropper(image, {
+        aspectRatio: 1/1,
+        crop(event){
+            console.log(event.detail.x);
+            console.log(event.detail.y);
+            console.log(event.detail.width);
+            console.log(event.detail.height);
+        }
+    });
+    function cropThat(){
+        cropper.getCroppedCanvas().toBlob((blob)=>{
+            cropImage.src = URL.createObjectURL(blob);
+            cropImage.style.display = "block";
+        })
+    }
+    </script> -->
 </body>
 </html>

@@ -4,6 +4,7 @@ const userSchema =new mongoose.Schema({
     name: {type:String, required: true},
     email: {type:String, required: true},
     password: {type:String, select: false, required: true},
+    profileurl: String,
 }) 
 
 userSchema.path("email").validate(async (value)=>{

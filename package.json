@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev:watch": "nodemon"
+    "dev:watch": "nodemon",
+    "build:css": "postcss csssource --dir public/css",
+    "build:cssw": "postcss csssource --dir public/css --watch"
   },
   "keywords": [],
   "author": "",
@@ -14,9 +16,14 @@
     "bcrypt": "^5.0.1",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.2.5"
+    "mongoose": "^6.2.5",
+    "multer": "^1.4.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "autoprefixer": "^10.4.4",
+    "nodemon": "^2.0.15",
+    "postcss": "^8.4.12",
+    "postcss-cli": "^9.1.0",
+    "postcss-nested": "^5.0.6"
   }
 }
