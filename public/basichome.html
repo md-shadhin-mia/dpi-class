@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -19,10 +17,10 @@
             <a href="#register" class="btn secondary m-2">Sign up</a>
         </div>
         <div class="user-menus">
-            <div class="avater" data-toggleId="user-ctrl" id="header-user-avater">
+            <div class="avater" data-toggleid="user-ctrl" id="header-user-avater">
             </div>
             <!-- <a href="/">shadhin</a> -->
-            <div class="menu-toggle" data-toggleId="option-menu">
+            <div class="menu-toggle" data-toggleid="option-menu">
                 <div class="one"></div>
                 <div class="two"></div>
                 <div class="three"></div>
@@ -36,11 +34,24 @@
         </div>
     </div>
     <div class="page-contents">
-        <div class="uploadfile" style="display: none;">
-            <form action="/upload" method="POST" enctype="multipart/form-data">
-                <input type="file" name="file" id="file">
-                <button type="submit" class="btn primary">Upload</button>
-            </form>
+        <div class="home">
+            <div style="display: flex;align-items: center; justify-content: center;" class="p-2">
+                <h3 style="flex-grow: 1;">Welcome to DPI Class</h3>
+                <a class="btn primary m-2" href="#createClass">New</a>
+            </div>
+            <div class="search input-group">
+                <input type="search" name="search" id="home-search" placeholder="Find a Class">
+            </div>
+            <div class="classlist">
+                <div class="classes" id="homepagedah">
+                    <img src="/image/labrotory.png" style="width: 100%;" alt="loading">
+                    <div class="basichome">
+                        <h1>Join now to class Easy</h1>
+                        <a href="#signin" class="btn primary m-2">Sing in</a>
+                        <a href="#register" class="btn secondary m-2">Sign up</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -52,7 +63,7 @@
             <div id="editorAndViewer">
                 <div class="circle" id="showImage"></div>
             </div>
-            <div class="editer" id="btn-inputfile" >
+            <div class="editer" id="btn-inputfile">
                 <label class="btn primary" for="openfile">Browse</label>
                 <input type="file" id="openfile" style="height: 0;width: 0;">
             </div>
@@ -61,10 +72,9 @@
             </div>
         </div>
     </div>
+    <!-- <script src="/js/axios.js"></script>
     <script src="/js/cropper.js"></script>
-    <script src="/js/axios.js"></script>
-    <script src="/js/qrcode.min.js"></script>
-    <script src="/main.js"></script>
+    <script src="/main.js"></script> -->
     <!-- <script>
         const image = document.getElementById('myimg');
         const cropImage = document.getElementById('cropImage');
@@ -84,5 +94,5 @@
         })
     }
     </script> -->
-</body>
-</html>
+
+</body></html>

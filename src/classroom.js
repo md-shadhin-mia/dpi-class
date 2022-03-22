@@ -2,7 +2,9 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const  mongoose  = require("mongoose");
 const { authenticate } = require("./middleware");
+const { Attendance } = require("./models/attendance");
 const { Classroom } = require("./models/classroom");
+const { Content } = require("./models/content");
 const router = express.Router();
 
 
@@ -21,7 +23,7 @@ router.get("/", authenticate,async (req, res)=>{
 router.get("/:id", authenticate, async (req, res)=>{
     try {
         const classrooms = await Classroom.findOne({_id:req.params.id})
-        .populate("host", "name");
+        .populate("host", "name").populate("students");
         res.json(classrooms);
     } catch (error) {
         res.status(400).json(error);
@@ -46,13 +48,87 @@ router.post("/", authenticate, (req, res)=>{
 //join to classroom
 router.get("/join/:id", authenticate, async (req, res)=>{
     try {
-        const classroom = await Classroom.findOne({_id:req.params.id});
-        classroom.students = [...classroom.students, req.user.id]
+        const classroom = await Classroom.findById(req.params.id);
+        if(classroom.students.indexOf(req.user.id) < 0)
+        {
+            classroom.students.push(req.user.id);
+        }else{
+            classroom.students.pull(req.user.id);
+        }
         let result = await classroom.save();
-        console.log(classroom.students);
         res.json(result);
     } catch (error) {
         res.status(400).json(error);
     }
+});
+
+//contents
+router.get("/content/:id", authenticate, (req, res)=>{
+    Content.find({classroom:req.params.id}).sort({createdAt:-1}).limit(10).populate("user").populate("likes")
+    .then(result => {
+        res.json(result);
+    })
+    .catch(error=>{
+        res.status(404).json(error);
+    });
+});
+
+router.post("/content/:id", authenticate, (req, res)=>{
+    const content = new Content({
+        text:req.body.text,
+        user:req.user.id,
+        classroom:req.params.id
+    });
+    content.save()
+    .then(result => {
+        res.json(result);
+    })
+    .catch(error=>{
+        res.status(400).json(error);
+    });
+});
+
+router.get("/content/like/:id", authenticate, async (req, res)=>{
+    try {
+        const content = await Content.findById(req.params.id);
+        if(content.likes.indexOf(req.user.id) < 0)
+        {
+            content.likes.push(req.user.id);
+        }else{
+            content.likes.pull(req.user.id);
+        }
+        let result = await content.save();
+        await result.populate("user");
+        await result.populate("likes");
+        res.json(result);
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+
+
+//attendance 
+
+router.get("/attendance/:id", authenticate, async (req, res)=>{
+    try {
+        const attendaces =await Attendance.find({classroom:req.params.id}).populate("host").populate("present");
+        res.json({attendaces, current_time: Date.now()});
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+router.post("/attendance/:id",  authenticate, (req, res)=>{
+    const attendace = new Attendance({
+        classroom: req.params.id,
+        host: req.user.id,
+        end_session : (Date.now()+(req.body.end_session*1000)).toString()
+    });
+    attendace.save()
+    .then(result => {
+        res.json(result);
+    })
+    .catch(error=>{
+        res.status(400).json(error);
+    });
 });
 module.exports.classRouter = router;

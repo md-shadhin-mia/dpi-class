@@ -1,0 +1,196 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="/js/cropper.css">
+   
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Classman</title>
+</head>
+<body>
+    <!-- <button onclick="showPage('signin');">sign in</button>
+    <button onclick="showPage('register');">sign up</button> -->
+    <div class="header authed" id="authcheck">
+        <div class="login-menus">
+            <a href="#signin" class="btn primary m-2">Sing in</a>
+            <a href="#register" class="btn secondary m-2">Sign up</a>
+        </div>
+        <div class="user-menus">
+            <div class="avater" data-toggleid="user-ctrl" id="header-user-avater">
+                <div class="avater-img">
+                
+                    <img src="/files/1648227058845_profile.png" alt="shadhin" style="width: 100%;">
+                </div>
+                <div class="text-primary text-bold p-2">
+                    Md Shadhin
+                </div>
+            </div>
+            <!-- <a href="/">shadhin</a> -->
+            <div class="menu-toggle" data-toggleid="option-menu">
+                <div class="one"></div>
+                <div class="two"></div>
+                <div class="three"></div>
+            </div>
+            <div class="more-option" id="option-menu">
+                <h3>helloworld</h3>
+            </div>
+            <div class="more-option" id="user-ctrl"><div class="user-photo">
+                <img src="/files/1648227058845_profile.png" alt="shadhin" style="width: 100%;">
+                
+            </div>
+            <div class="m-2 p-2">
+                <h2 class="text-primary">Md Shadhin</h2>
+            </div>
+            <div class="p-2">
+                <h4>mdshadhin@dpi.com</h4>
+            </div>
+            <div class="m-2 p-2">
+                <a href="#" onclick="logout()" class="btn secondary">Logout</a>
+            </div></div>
+        </div>
+    </div>
+    <div class="page-contents">
+        <div class="classroom">
+            <div class="head" id="class-hader">
+                <div class="title">
+                    <h3 class="text-bold">
+                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" fill="currentColor">
+                            <path fill-rule="evenodd" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path>
+                        </svg>
+                        Datebase Class</h3>
+                </div>
+                <div class="audience text-gray">
+                1 user | 10 Assignment
+                </div>
+                <div class="actions m-2 p-2">
+                    <button class="btn secondary m-2" id="class-share-button">Share</button>
+                    <div class="share-menu">
+                        <div class="input-group">
+                            <input type="text" value="http://127.0.0.1:3000/join/6236ac79ab9308038f9198ba" id="share-menu-fill">
+                            <button class="btn" onclick="clipboardCopy('share-menu-fill')">copy</button>
+                        </div>
+                    </div>
+                    <button class="btn primary">join</button>
+                </div>
+                <div class="tabs">
+                    <ul class="tabmenu">
+                        <li class="tab-item active" id="content-tab">content</li>
+                        <li class="tab-item disabled" id="attendance-tab">attendance</li>
+                        <script>
+                            document.querySelector(".tabs .tabmenu").onclick = function(e){
+                                if(e.target.id == "attendance-tab"){
+                                    document.querySelector(".classroom .body").classList.add("attendance")
+                                }else{
+                                    document.querySelector(".classroom .body").classList.remove("attendance")
+                                    
+                                }
+                                for (let index = 0; index < this.children.length; index++) {
+                                    const element = this.children[index];
+                                    element.classList.remove("active");
+                                }
+                                e.target.classList.add("active");
+                                // this.children.classList.remove("active")
+                            }
+                        </script>
+                    </ul>
+                </div>
+            </div>
+            <div class="body attendance">
+                <div class="content-view">
+                    <form style="margin: 5px;" id="class-content-form">
+                        <div class="input-group">
+                            <label for="content">adding a new info</label>
+                            <textarea name="content" id="content" cols="10" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn primary w100">Post</button>
+                    </form>
+                    <div class="contents" id="classcontent-views"><div class="content-item">
+                    <div class="head">
+                        <div class="avater-img">
+                            <img src="/files/1648227058845_profile.png" alt="shadhin" style="width: 100%;">
+                        </div>
+                        <h3 class="text-bold p-2">Md Shadhin</h3>
+                    </div>
+                    <div class="text p-2">
+                        <p>Hello Datebase students in this a simple database class</p>
+                    </div>
+                    <div class="foot">
+                        10
+                        <div class="btn m-2" id="like">❤</div>
+                    </div>
+                    </div></div>
+                </div>
+                <div class="attendace-view">
+                    <!-- <div class="search input-group">
+                        <input type="search" name="search" id="home-search" placeholder="Find a Class">
+                    </div> -->
+                    
+                    <h2 class="text-gray text-center">No Attendance Session</h2>
+                    <div class="new-session">
+                        <button class="btn primary" id="starting-attendance-settion">Start a Settion Now</button>
+                    </div>
+                    <script>
+                        document.getElementById("starting-attendance-settion").onclick = (e)=>
+                        {
+                            document.querySelector(".body .attendace-view").innerHTML = `
+                            <form>
+                                <div class="input-group">
+                                    <label for="end_session">Select Settion Time</label>
+                                    <select name="end_session" id="end_session">
+                                        <option value="5">5 Minute</option>
+                                        <option value="10">10 Minute</option>
+                                        <option value="15">15 Minute</option>
+                                    </select>
+                                </div>
+                                <button class="btn primary" type="submit">Start</button>
+                            </form>
+                            `;
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overflow" id="overflow-dialog">
+        <div class="dialog">
+            <div class="title">
+                <h3>Upload a Profile</h3>
+            </div>
+            <div id="editorAndViewer">
+                <div class="circle" id="showImage"></div>
+            </div>
+            <div class="editer" id="btn-inputfile">
+                <label class="btn primary" for="openfile">Browse</label>
+                <input type="file" id="openfile" style="height: 0;width: 0;">
+            </div>
+            <div class="editer hide" id="btn-crop">
+                <button class="btn primary" id="btn-action">Continue</button>
+            </div>
+        </div>
+    </div>
+    <!-- <script src="/js/axios.js"></script>
+    <script src="/js/cropper.js"></script>
+    <script src="/main.js"></script> -->
+    <!-- <script>
+        const image = document.getElementById('myimg');
+        const cropImage = document.getElementById('cropImage');
+    const cropper = new Cropper(image, {
+        aspectRatio: 1/1,
+        crop(event){
+            console.log(event.detail.x);
+            console.log(event.detail.y);
+            console.log(event.detail.width);
+            console.log(event.detail.height);
+        }
+    });
+    function cropThat(){
+        cropper.getCroppedCanvas().toBlob((blob)=>{
+            cropImage.src = URL.createObjectURL(blob);
+            cropImage.style.display = "block";
+        })
+    }
+    </script> -->
+
+<iframe style="position: absolute; width: 1px; height: 1px; left: -9999px;" src="https://www.ciuvo.com/ciuvo/globalstorage?version=2.1.3"></iframe></body></html>
