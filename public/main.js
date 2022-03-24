@@ -499,6 +499,25 @@ function viewClasses(){
         //basic home
     }
 }
+
+
+//load notify
+async function loadNotify(){
+    let respo = await axios.get("/classroom/notify", {headers:getRequestHeader()});
+    let ntfc = localStorage.getItem("notifycount");
+    let count = respo.data.c;
+    if(ntfc){
+        let ntfcObj = JSON.parse(ntfc);      
+        if(ntfcObj.tcn != count.tcn || ntfcObj.tl != count.tl){
+            viewsContent();
+            // console.log("update", count, ntfcObj);
+            localStorage.setItem("notifycount", JSON.stringify(count));
+        }
+    }else{
+        localStorage.setItem("notifycount",JSON.stringify(count));
+    }
+    setTimeout(loadNotify, 300);
+}
 //join to classroom
 function joinToClass(){
     axios.get("/classroom/join/"+classId, {headers:getRequestHeader()})
@@ -580,6 +599,7 @@ function viewClassroom(){
                 //attendance view
                 viewAttendance(data.host._id == youUser._id);
                 viewsContent();
+                setTimeout(loadNotify, 100);
             })
             .catch(err => {
                 console.error(err);

@@ -19,6 +19,34 @@ router.get("/", authenticate,async (req, res)=>{
     .populate("host", "name");
     res.json(classrooms);
 });
+
+//notification
+
+router.get("/notify", authenticate, async (req, res)=>{
+    try {
+        const classes = await Classroom.find({
+            $or:[
+                {host:req.user.id},
+                {students:req.user.id}
+            ]
+        });
+        let totalClasses = classes.length;
+        let totalContent = 0;
+        let totalLike = 0;
+        for(let i = 0; i < totalClasses; i++){
+            let contents =await Content.find({classroom:classes[i]._id.toString()});
+            totalContent += contents.length;
+            for(let j = 0; j < totalContent; j++){
+                totalLike += contents[j].likes.length;
+            }
+        }
+        let count = {tc:totalClasses, tcn: totalContent, tl : totalLike};
+        res.json({c:count});
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+
 //view classroom
 router.get("/:id", authenticate, async (req, res)=>{
     try {
@@ -131,4 +159,5 @@ router.post("/attendance/:id",  authenticate, (req, res)=>{
         res.status(400).json(error);
     });
 });
+
 module.exports.classRouter = router;
