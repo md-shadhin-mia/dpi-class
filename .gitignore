@@ -1,2 +1,6 @@
 node_modules
+<<<<<<< HEAD
 public/files/*
+=======
+public/files/*
+>>>>>>> 1b7fdf0d8baf519cd9a33478852f169690730b57
