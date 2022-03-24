@@ -16,7 +16,7 @@
     --primary: #3772ff;
     --primary-shade: #205eee;
     --secondary: #6c757d;
-    --success: #67d587;
+    --success: #65d689;
     --info: #17a2b8;
     --warning: #ffc107;
     --danger: #dc3545;
@@ -251,6 +251,7 @@ body{
   font-weight: 700;
 }
 .text-center{
+  display:block;
   text-align: center;
 }
 .caption{
@@ -318,15 +319,6 @@ body{
             align-items: center;
             padding:4px;
           }
-
-
-.classroom .body .content-view .contents .content-item .head .avater-img{
-              height: 25px;
-              width: 25px;
-              background-color: var(--green);
-              border-radius: 50%;
-              overflow: hidden;
-            }
 
 
 .classroom .body .content-view .contents .content-item .text{
@@ -491,14 +483,13 @@ body{
   cursor: pointer;
   border-radius: 25px;
 }
-.avater .avater-img{
-    height: 25px;
-    width: 25px;
-    background-color: var(--green);
-    border-radius: 50%;
-    overflow:hidden;
-  }
-
+.avater-img{
+  height: 25px;
+  width: 25px;
+  background-color: var(--green);
+  border-radius: 50%;
+  overflow: hidden;
+}
 /*share menu  */
 .share-menu{
   position: absolute;
@@ -546,4 +537,28 @@ body{
 .tabs .tabmenu .tab-item.active
       {
         border-bottom: 2px solid var(--primary);
+      }
+.att-item{
+  display: flex;
+  padding: 8px;
+  background-color: var(--dark);
+  margin: 2px;
+  align-items: center;
+}
+.att-item .name{
+    padding: 4px;
+    font-size: 1.38em;
+  }
+.att-item .checkbox{
+    width: 24px;
+    margin-left: auto;
+    height: 24px;
+    border: 2px solid var(--success);
+    border-radius: 50%;
+  }
+.att-item .checkbox img{
+      display: none;
+    }
+.att-item .checkbox.checked img{
+        display: block;
       }

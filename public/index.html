@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="theme-color" content="#4573e1">
+    <link rel="icon" type="image/png" href="/image/logo192.png">
     <link rel="stylesheet" href="/js/cropper.css">
-   
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="image/logo192.png">
     <title>Classman</title>
 </head>
 <body>
@@ -28,7 +31,9 @@
                 <div class="three"></div>
             </div>
             <div class="more-option" id="option-menu">
-                <h3>helloworld</h3>
+                <div class="more-menu">
+                    <a href="#home" class="text-center text-primary p-2">HOME</a>
+                </div>
             </div>
             <div class="more-option" id="user-ctrl">
                 
@@ -65,22 +70,17 @@
     <script src="/js/axios.js"></script>
     <script src="/js/qrcode.min.js"></script>
     <script src="/main.js"></script>
+
     <!-- <script>
-        const image = document.getElementById('myimg');
-        const cropImage = document.getElementById('cropImage');
-    const cropper = new Cropper(image, {
-        aspectRatio: 1/1,
-        crop(event){
-            console.log(event.detail.x);
-            console.log(event.detail.y);
-            console.log(event.detail.width);
-            console.log(event.detail.height);
-        }
-    });
-    function cropThat(){
-        cropper.getCroppedCanvas().toBlob((blob)=>{
-            cropImage.src = URL.createObjectURL(blob);
-            cropImage.style.display = "block";
+   //service worker
+    if("serviceWorker" in navigator){
+        navigator.serviceWorker.register("service-worker.js")
+        .then(register=>{
+            console.log("service Worker Registed");
+            console.log(register);
+        }).catch(error=>{
+            console.error("service worker registation fail");
+            console.log(error);
         })
     }
     </script> -->

@@ -638,31 +638,32 @@ function viewAttendance(isHost=false){
                         ${isHost?newSession:""}
                     `;
         console.log(data);
+        
+        if(document.getElementById("starting-attendance-settion")){
+            document.getElementById("starting-attendance-settion").onclick = (e)=>
+            {
+                document.querySelector(".body .attendace-view").innerHTML = `
+                <form id="new-attendance-form">
+                    <div class="input-group">
+                        <label for="end_session">Select Settion Time</label>
+                        <select name="end_session" id="end_session">
+                            <option value="5">5 Minute</option>
+                            <option value="10">10 Minute</option>
+                            <option value="15">15 Minute</option>
+                        </select>
+                    </div>
+                    <button class="btn primary" type="submit">Start</button>
+                </form>
+                `;
+                if(document.getElementById("new-attendance-form"))
+                {
+                    document.getElementById("new-attendance-form").onsubmit =  submitNewAttendance;
+                }
+            }
+        }
     }).catch(err => {
         console.error(err);
     });
-    if(document.getElementById("starting-attendance-settion")){
-        document.getElementById("starting-attendance-settion").onclick = (e)=>
-        {
-            document.querySelector(".body .attendace-view").innerHTML = `
-            <form id="new-attendance-form">
-                <div class="input-group">
-                    <label for="end_session">Select Settion Time</label>
-                    <select name="end_session" id="end_session">
-                        <option value="5">5 Minute</option>
-                        <option value="10">10 Minute</option>
-                        <option value="15">15 Minute</option>
-                    </select>
-                </div>
-                <button class="btn primary" type="submit">Start</button>
-            </form>
-            `;
-            if(document.getElementById("new-attendance-form"))
-            {
-                document.getElementById("new-attendance-form").onsubmit =  submitNewAttendance;
-            }
-        }
-    }
 }
 
 function submitNewAttendance(event){
@@ -719,33 +720,44 @@ function changeProfile(fileInput){
             document.querySelector("#btn-inputfile").classList.add("hide");
             document.querySelector("#btn-crop").classList.remove("hide");
             document.querySelector("#btn-crop #btn-action").onclick = ()=>{
-            croper.getCroppedCanvas().toBlob((blob)=>{
-                    document.querySelector("#editorAndViewer").innerHTML = temp;
-                    let proimg = document.createElement("img");
-                    proimg.style.width = "100%";
-                    proimg.src = URL.createObjectURL(blob);
-                    document.querySelector("#showImage").appendChild(proimg);
-
-                    //uploading
-                    let data = new FormData()
-                    data.append('profile', blob, "profile.png")
-                    
-                    let config = {
-                      headers: {
-                        ...getRequestHeader(),
-                        'Content-Type' : 'multipart/form-data'
-                      },
-                      onUploadProgress: data => console.log(Math.round((100*data.loaded)/data.total))
-                    }
-                    axios.post("/profile", data, config).then(response => {
-                      if(response.data){
-                          finishOverflowDialog();
-                          location.href = "#";
-                      }
-                    }).catch(error => {
-                      console.log('error', error)
-                    })
-                });
+                croper.getCroppedCanvas().toBlob((blob)=>{
+                        document.querySelector("#editorAndViewer").innerHTML = temp;
+                        let proimg = document.createElement("img");
+                        proimg.style.width = "100%";
+                        proimg.src = URL.createObjectURL(blob);
+                        document.querySelector("#showImage").appendChild(proimg);
+                        document.querySelector("#btn-crop").innerHTML=
+                        `
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" height="22px" viewBox="0 0 254.95 22" style="enable-background:new 0 0 254.95 22;" xml:space="preserve" width="270px">
+                            <style type="text/css">
+                                .st0{fill:#FFFFFF;stroke:#8E8D8D;stroke-width:22;stroke-linecap:round;stroke-miterlimit:10;}
+                                #progress{stroke:var(--primary);transition: all 0.3s linear;d:path("M10, 11 L10, 11");}
+                            </style>
+                            <line class="st0" y1="11" x1="10" y2="11" x2="250"></line>
+                            <path class="st0" id="progress"></path>
+                        </svg>
+                        `;
+                        //uploading
+                        let data = new FormData();
+                        data.append('profile', blob, "profile.png");
+                        
+                        let config = {
+                            headers: {
+                                ...getRequestHeader(),
+                                'Content-Type' : 'multipart/form-data'
+                            },
+                            onUploadProgress: data => {
+                                load = Math.round((240*data.loaded)/data.total);
+                                document.getElementById("progress").style.d = `path("M10, 11 L${load+10}, 11")`;
+                            }
+                        };
+                        axios.post("/profile", data, config).then(response => {
+                            if(response.data){
+                                setTimeout(()=>finishOverflowDialog(), 400);
+                                location.href = "#home";
+                            }
+                        }).catch(error => console.log('error', error))
+                    });
             }
         }
         fr.readAsDataURL(selectFile[0]);
@@ -865,3 +877,4 @@ function clipboardCopy(id) {
 
 //call global
 showPage(location.hash);
+

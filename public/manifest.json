@@ -1,0 +1,21 @@
+{
+    "name":"Dpi Class",
+    "short_name":"Dpi Class",
+    "start_url":".",
+    "background_color": "#232631",
+    "theme_color":"#4573e1",
+    "display": "standalone",
+    "icons":[
+        {
+            "src":"image/logo192.png",
+            "sizes":"193x193",
+            "type":"image/png"
+        },
+        {
+            "src":"image/logo512.png",
+            "sizes":"513x513",
+            "type":"image/png"
+        }
+    ]
+
+}
