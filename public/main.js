@@ -599,7 +599,6 @@ function viewClassroom(){
                 //attendance view
                 viewAttendance(data.host._id == youUser._id);
                 viewsContent();
-                setTimeout(loadNotify, 100);
             })
             .catch(err => {
                 console.error(err);
@@ -898,3 +897,4 @@ function clipboardCopy(id) {
 //call global
 showPage(location.hash);
 
+setTimeout(loadNotify, 100);

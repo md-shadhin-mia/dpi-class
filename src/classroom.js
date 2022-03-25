@@ -35,14 +35,17 @@ router.get("/notify", authenticate, async (req, res)=>{
         let totalLike = 0;
         for(let i = 0; i < totalClasses; i++){
             let contents =await Content.find({classroom:classes[i]._id.toString()});
-            totalContent += contents.length;
-            for(let j = 0; j < totalContent; j++){
-                totalLike += contents[j].likes.length;
+            let CountContent = contents.length;
+            for(let j = 0; j < CountContent; j++){
+                if(contents[j].likes)
+                    totalLike += contents[j].likes.length;
             }
+            totalContent +=CountContent;
         }
         let count = {tc:totalClasses, tcn: totalContent, tl : totalLike};
         res.json({c:count});
     } catch (error) {
+        console.log(error);
         res.status(400).json(error);
     }
 });
