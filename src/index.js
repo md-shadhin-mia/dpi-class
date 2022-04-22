@@ -8,9 +8,11 @@ const { auth } = require("./auth");
 const { classRouter } = require("./classroom");
 const { authenticate } = require("./middleware");
 const { User } = require("./models/user");
+const cors = require("cors");
 let PORT = process.env.PORT || 3000;
 let MONGODB = process.env.MONGODB || "mongodb://localhost:27017/classman";
 const app = express();
+app.use(cors())
 const storage = diskStorage({
     destination: (req, file, cb)=>{
         cb(null, 'public/files')

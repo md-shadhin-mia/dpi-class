@@ -357,6 +357,16 @@ body{
       }
 
 
+.classroom .body .attendace-view .students{
+        display: none;
+      }
+
+
+.classroom .body .attendace-view .students.host{
+          display: block;
+        }
+
+
 .classroom .body.attendance .content-view{
         display: none;
       }
@@ -547,7 +557,6 @@ body{
 }
 .att-item .name{
     padding: 4px;
-    font-size: 1.38em;
   }
 .att-item .checkbox{
     width: 24px;
@@ -562,3 +571,24 @@ body{
 .att-item .checkbox.checked img{
         display: block;
       }
+
+
+.counter {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+    background: var(--dark);
+}
+
+
+.counter .count {
+    position: relative;
+  }
+
+
+.counter .count #cnt-dwn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }

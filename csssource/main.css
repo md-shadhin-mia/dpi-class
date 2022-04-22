@@ -318,7 +318,14 @@ body{
         align-items: center;
         margin-top: 8px;
       }
+      .students{
+        display: none;
+        &.host{
+          display: block;
+        }
+      }
     }
+
     &.attendance{
       .content-view{
         display: none;
@@ -503,7 +510,6 @@ body{
   align-items: center;
   .name{
     padding: 4px;
-    font-size: 1.38em;
   }
   .checkbox{
     width: 24px;
@@ -518,6 +524,23 @@ body{
       img{
         display: block;
       }
+    }
+  }
+}
+
+
+.counter {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+    background: var(--dark);
+  .count {
+    position: relative;
+    #cnt-dwn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
   }
 }

@@ -42,7 +42,8 @@ router.get("/notify", authenticate, async (req, res)=>{
             }
             totalContent +=CountContent;
         }
-        let count = {tc:totalClasses, tcn: totalContent, tl : totalLike};
+        const attendaces =await Attendance.find({end_session: {$gte: (Date.now())}});
+        let count = {tc:totalClasses, tcn: totalContent, tl : totalLike, tac:attendaces.length};
         res.json({c:count});
     } catch (error) {
         console.log(error);
@@ -142,17 +143,38 @@ router.get("/content/like/:id", authenticate, async (req, res)=>{
 
 router.get("/attendance/:id", authenticate, async (req, res)=>{
     try {
-        const attendaces =await Attendance.find({classroom:req.params.id}).populate("host").populate("present");
+        const attendaces =await Attendance.find({classroom:req.params.id}).populate("host").populate("present").populate("classroom");
         res.json({attendaces, current_time: Date.now()});
     } catch (error) {
         res.status(400).json(error);
     }
 });
+router.get("/attendance/attend/:id", authenticate, async (req, res)=>{
+    try {
+        const attendaces =await Attendance.findById(req.params.id);
+        if(!attendaces.present.filter(value=> value == req.user.id).length)
+            attendaces.present.push(req.user.id);
+        await attendaces.save();
+        res.json({attendaces, current_time: Date.now()});
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+
+router.get("/attendance/check/:id", authenticate, async (req, res)=>{
+    try {
+        const attendaces =await Attendance.findById(req.params.id);
+        res.json({attendaces, current_time: Date.now()});
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+
 router.post("/attendance/:id",  authenticate, (req, res)=>{
     const attendace = new Attendance({
         classroom: req.params.id,
         host: req.user.id,
-        end_session : (Date.now()+(req.body.end_session*1000)).toString()
+        end_session : (Date.now()+(req.body.end_session*1000*60)).toString()
     });
     attendace.save()
     .then(result => {

@@ -11,7 +11,7 @@ const htmlPages={
             </div>
             <div class="classlist">
                 <div class="classes" id="homepagedah">
-                    <img src="/image/circlespainer.svg" alt="loading">
+                    <img src="/image/circlespainer.svg" alt="loading" style="margin-left: calc(50% - 40px);">
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@ const htmlPages={
     classroom:`
         <div class="classroom">
             <div class="head" id="class-hader">
-                <img src="/image/circlespainer.svg" alt="loading" style="margin-left: 40%;">
+                <img src="/image/circlespainer.svg" alt="loading" style="margin-left: calc(50% - 40px);">
             </div>
             <div class="body">
                 <div class="content-view">
@@ -98,7 +98,7 @@ const htmlPages={
                         <button type="submit" class="btn primary w100">Post</button>
                     </form>
                     <div class="contents" id="classcontent-views">
-                        <img src="/image/circlespainer.svg" alt="loading" style="margin-left: 40%;">
+                        <img src="/image/circlespainer.svg" alt="loading" style="margin-left: calc(50% - 40px);">
                     </div>
                 </div>
                 <div class="attendace-view">
@@ -112,6 +112,8 @@ var youUser = {}
 const pageContents = document.querySelector(".page-contents");
 var classId = "";
 var loginTargetUrl = "";
+var isClsNofity = false;
+var attdCtl = null;
 function showPage(hashname){
     classnames = hashname.split("#")
     if(classnames[1])
@@ -132,11 +134,16 @@ function showPage(hashname){
         //home
         showPage("#home");
     }
+    isClsNofity = false;
     switch (classnames[1]) {
         case "classroom":
             //load and view a single class
             classId = classnames[2];
             viewClassroom();
+            if(!isClsNofity){
+                isClsNofity = true;
+                setTimeout(loadNotify, 100);
+            }
             break;
         case "home":
             if(localStorage.getItem("auth"))
@@ -350,6 +357,7 @@ function createClassHandle(e){
         }
     });
 }
+
 //create class content
 function createContentHandle(e){
     e.preventDefault();
@@ -516,7 +524,9 @@ async function loadNotify(){
     }else{
         localStorage.setItem("notifycount",JSON.stringify(count));
     }
-    setTimeout(loadNotify, 300);
+    if(isClsNofity){
+        setTimeout(loadNotify, 1000);
+    }
 }
 //join to classroom
 function joinToClass(){
@@ -597,7 +607,7 @@ function viewClassroom(){
                 });
 
                 //attendance view
-                viewAttendance(data.host._id == youUser._id);
+                attdCtl = viewAttendance(data.host._id == youUser._id, data.students);
                 viewsContent();
             })
             .catch(err => {
@@ -643,60 +653,239 @@ function viewsContent(){
 
 
 //load attendance 
-function viewAttendance(isHost=false){
-    
-    axios.get("/classroom/attendance/"+classId, {headers:getRequestHeader()})
-    .then(({data})=>{
-        let newSession = `
-            <div class="new-session">
-                <button class="btn primary" id="starting-attendance-settion">Start a Settion Now</button>
-            </div>
-        `;
-        document.querySelector(".body .attendace-view").innerHTML = `
-                        <h2 class="text-gray text-center">No Attendance Session</h2>
-                        ${isHost?newSession:""}
-                    `;
-        console.log(data);
+function viewAttendance(isHost=false, students=[]){
+    const attendaceViewAria = document.querySelector(".body .attendace-view");
+    let attendaces = [];
+    let activeAtt = null;
+    let current_time = null;
+    const  submitNewAttendance = (event) => {
+        event.preventDefault();
+        const form = event.target;
+        axios.post("/classroom/attendance/"+classId, {
+            end_session:form.end_session.value
+        }, {headers:getRequestHeader()})
+        .then(({data})=>{
+            console.log(data);
+        }).catch(err => {
+            console.error(err);
+        });
+    };
+    const loadAttendace = ()=>{
+        axios.get("/classroom/attendance/"+classId, {headers:getRequestHeader()})
+        .then(({data})=>{
+            console.log(data);
+            attendaces = data.attendaces;
+            current_time = data.current_time;
+            activeAtt = attendaces.filter((vlue)=> vlue.end_session > data.current_time);
+            console.log(activeAtt);
+            if(activeAtt.length)
+                viewNow("active-attendance");
+            else
+                viewNow();
+        }).catch(err => {
+            console.error(err);
+        });
+    }
+    const dwnlod=(index=0)=>{
         
-        if(document.getElementById("starting-attendance-settion")){
-            document.getElementById("starting-attendance-settion").onclick = (e)=>
-            {
-                document.querySelector(".body .attendace-view").innerHTML = `
-                <form id="new-attendance-form">
-                    <div class="input-group">
-                        <label for="end_session">Select Settion Time</label>
-                        <select name="end_session" id="end_session">
-                            <option value="5">5 Minute</option>
-                            <option value="10">10 Minute</option>
-                            <option value="15">15 Minute</option>
-                        </select>
+        
+       let data = `<svg width="2480" height="3508" xmlns="http://www.w3.org/2000/svg"><style>#students{  font-family: Arial, Helvetica, sans-serif;  border-collapse: collapse;  width: 100%;}#students td,#students th {  border: 1px solid #ddd;  padding: 8px;}#students tr:nth-child(even){background-color: #f2f2f2;}#students th {  padding-top: 12px;  padding-bottom: 12px;  text-align: left;  color: gray;  font-weight: 700;}</style><foreignObject width='100%' height='100%'><div xmlns='http://www.w3.org/1999/xhtml' style='font-size:40px;margin:1in;'><h1> ${attendaces[index].classroom.title} - Attendace Report</h1><h2 style="color:gray;">${new Date(attendaces[index].createdAt).toLocaleString()}</h2><table id="students">  <tr>    <th>ID</th>    <th>Name</th>    <th>Present</th>  </tr>  ${
+            students.map((std)=>`<tr><td>${std._id}</td><td>${std.name}</td><td>${attendaces[index].present.filter(val=>val._id == std._id).length? "Yes":"No"}</td></tr>`).join("")
+        }</table></div></foreignObject></svg>`;
+        let DOMURL = self.URL || self.webkitURL || self;
+        let image = new Image();
+        image.crossOrigin = "Anonymous";
+        let svg = new Blob([data], {type: "image/svg+xml;charset=utf-8"});
+        setTimeout(
+            function(){
+                let canvas = document.createElement("canvas");
+                canvas.height = "3508";
+                canvas.width = "2480";
+                let ctx = canvas.getContext("2d");
+                ctx.drawImage(image, 0, 0);
+                var download = document.createElement('a');
+                download.href = canvas.toDataURL('image/png');
+                download.download = "attendace-"+attendaces[index].createdAt+".png";
+                download.click();
+        }, 100       
+       )
+        image.src = DOMURL.createObjectURL(svg);
+    }
+    let viewNow = (active = "basic")=>{
+        switch(active){
+            case "basic":
+                    let newSession = `
+                        <div class="new-session">
+                            <button class="btn primary" id="starting-attendance-settion">Start a Settion Now</button>
+                            <button class="btn secondary m-2" id="downloading-attendace">Dwonload Previous Doc</button>
+                        </div>
+
+                    `;
+                    attendaceViewAria.innerHTML = `
+                                    <h2 class="text-gray text-center">No Attendance Session</h2>
+                                    ${isHost?newSession:""}
+
+                                `;
+                    if(document.getElementById("starting-attendance-settion"))
+                        document.getElementById("starting-attendance-settion").onclick = ()=> viewNow("new-attendance-form");
+                    if(document.getElementById("downloading-attendace"))
+                        document.getElementById("downloading-attendace").onclick = ()=> viewNow("download-attendance");
+                break;
+            case "new-attendance-form":
+                attendaceViewAria.innerHTML = `
+                    <form id="new-attendance-form">
+                        <div class="input-group">
+                            <label for="end_session">Select Settion Time</label>
+                            <select name="end_session" id="end_session">
+                                <option value="5">5 Minute</option>
+                                <option value="10">10 Minute</option>
+                                <option value="15">15 Minute</option>
+                            </select>
+                        </div>
+                        <button class="btn primary" type="submit">Start</button>
+                    </form>
+                    `;
+                    document.getElementById("new-attendance-form").onsubmit =(evt)=>{
+                        evt.preventDefault();
+                        const form = evt.target;
+                        console.log(form.end_session.value);
+                        attendaceViewAria.innerHTML = `<img src="/image/circlespainer.svg" alt="loading" style="margin-left: calc(50% - 40px);">`;
+                        axios.post("/classroom/attendance/"+classId, {
+                            end_session:form.end_session.value
+                        }, {headers:getRequestHeader()})
+                        .then(({data})=>{
+                            console.log(data);
+                            loadAttendace();
+                        }).catch(err => {
+                            console.error(err);
+                        });
+                    }
+                break;
+                
+                case "active-attendance":
+                    attendaceViewAria.innerHTML = `<div class="counter">
+                            <div class="title">
+                                <h2>Active Attendace</h2>
+                                <div class="text-primary">54/54/4</div>
+                            </div>
+                            <div class="count">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="120" width="120">
+                                    <path id="arg" d="M 59 4 A 56 56 0 1 0 60 4" style="stroke: var(--primary);stroke-width: 5;fill: none;"></path>
+                                </svg>
+                                <h1 id="cnt-dwn">10:59</h1>
+                            </div>
+                        </div>
+                        <h3>Give Attendance</h3>
+                        <div class="students${isHost? " host":""}">
+                            ${
+                                students.map((std)=>{
+                                    return  `
+                                    <div class="att-item" id="${std._id}">
+                                        <div class="avater-img">
+                                            <img src="${std.profileurl}" alt="${std.name}" style="width: 100%;">
+                                        </div>
+                                        <div class="name text-bold">${std.name}</div>
+                                        <div class="checkbox">
+                                            <img src="/image/check-circle.svg" width="100%" alt="check">
+                                        </div>
+                                    </div>
+                                    `}
+                                ).join("")
+                            }
+                        </div>
+                        <button class="btn primary" id="attent">attent now </button>
+                        `
+                        ;
+                        // document.querySelector(".students").children[students[0]._id].querySelector(".checkbox").classList.add("checked")
+                        const update = (present=[])=>{
+                            present.forEach((id=>{
+                                if(id==youUser._id)
+                                {
+                                    document.querySelector(".students").classList.add("host");
+                                    document.getElementById("attent").style.display = 'none';
+                                }
+                                document.querySelector(".students").children[id].querySelector(".checkbox").classList.add("checked")
+                            }))
+                        }
+                        let reqQfree = true;
+                        const checkAtt = ()=>{
+                            reqQfree = false;
+                            axios.get("/classroom/attendance/check/"+activeAtt[0]._id, {headers:getRequestHeader()})
+                            .then(({data})=>{
+                                reqQfree = true;
+                                update(data.attendaces.present);
+                            }).catch(err => {
+                                console.error(err);
+                            })
+                        }
+                        if(document.getElementById("attent"))
+                            document.getElementById("attent").onclick = ()=> 
+                            {
+                                axios.get("/classroom/attendance/attend/"+activeAtt[0]._id, {headers:getRequestHeader()})
+                                .then(({data})=>{
+                                    update(data.attendaces.present);
+                                }).catch(err => {
+                                    console.error(err);
+                                })
+                            }
+                        
+                        if(activeAtt[0].present.length)
+                            {
+                                update(activeAtt[0].present.map(pre=>pre._id))
+                            }
+                        let remine = activeAtt[0].end_session - current_time;
+                        const duration = remine;
+                        const nowtime = Date.now()+remine;
+                        console.log(activeAtt[0]);
+                        let cntInt = setInterval(()=>{
+                            if(nowtime < Date.now())
+                            {
+                                document.querySelector(".count #cnt-dwn").innerText = "Timeup";
+                                console.log("time up");
+                                clearInterval(cntInt);
+                                document.querySelector(".count path#arg").setAttribute("d", 
+                                 describeArc(60, 60, 58, 0, 0)
+                                )
+                                loadAttendace();
+                            }
+                            else
+                            {
+                                remine = nowtime - Date.now();
+                                document.querySelector(".count #cnt-dwn").innerText
+                                 =((remine/1000 | 0)/60 | 0) + ":" + ((remine/1000 | 0)%60);
+                                 document.querySelector(".count path#arg").setAttribute("d", 
+                                 describeArc(60, 60, 58, 0, (remine/duration)*360)); 
+                                 if(reqQfree)
+                                    checkAtt();
+                            }
+                        },300);
+                        console.log(attendaces);
+                    break;
+                case "download-attendance":
+                    attendaceViewAria.innerHTML =  `
+                    <h3>Give Attendance</h3>
+                    <div class="donload-list">
+                    ${attendaces.map((value, index)=>
+                        `
+                        <div class="att-item m-2" style="justify-content:space-between;" id="asdf">
+                            <div class="name text-bold">${value.createdAt}</div>
+                            <button class="btn secondary" onclick="attdCtl.dwnlod(${index})">Dwonload</button>
+                        </div>
+                        `
+                     ).join("")}
+            
                     </div>
-                    <button class="btn primary" type="submit">Start</button>
-                </form>
-                `;
-                if(document.getElementById("new-attendance-form"))
-                {
-                    document.getElementById("new-attendance-form").onsubmit =  submitNewAttendance;
-                }
+                    `;
+                    break;
             }
-        }
-    }).catch(err => {
-        console.error(err);
-    });
+    }
+  
+    // viewNow();
+    loadAttendace();
+    return {loadAttendace, viewNow, dwnlod}
 }
 
-function submitNewAttendance(event){
-    event.preventDefault();
-    const form = event.target;
-    axios.post("/classroom/attendance/"+classId, {
-        end_session:form.end_session.value
-    }, {headers:getRequestHeader()})
-    .then(({data})=>{
-        console.log(data);
-    }).catch(err => {
-        console.error(err);
-    });
-}
+
 //linke to content
 function linkeToContent(id)
 {
@@ -896,5 +1085,31 @@ function clipboardCopy(id) {
 
 //call global
 showPage(location.hash);
+if(localStorage.getItem("auth"))
+    setTimeout(loadNotify, 100);
 
-setTimeout(loadNotify, 100);
+
+function polarToCartesian(centerX, centerY, radius, angleInDegrees)
+{
+    var angleInRadians = (angleInDegrees-90) * Math.PI / 180.0;
+    
+    return {
+    x: centerX + (radius * Math.cos(angleInRadians)),
+    y: centerY + (radius * Math.sin(angleInRadians))
+    };
+}
+        
+function describeArc(x, y, radius, startAngle, endAngle)
+{
+    var start = polarToCartesian(x, y, radius, endAngle);
+    var end = polarToCartesian(x, y, radius, startAngle);
+    
+    var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+    
+    var d = [
+    "M", start.x, start.y,
+    "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
+    ].join(" ");
+    
+    return d;
+}
